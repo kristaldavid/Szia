@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('location');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
+            $table->foreignId('user_id');
         });
     }
 
