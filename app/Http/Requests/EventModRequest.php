@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class EventRequest extends FormRequest
+class EventModRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class EventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|unique:events',
+            'name' => 'required|string',
             'description' => 'required|string',
             'location' => 'required|string',
             'start_date' => 'required',
@@ -35,7 +35,6 @@ class EventRequest extends FormRequest
     public function messages() {
         return [
             'name.required' => 'A név elvárt',
-            'name.unique' => 'Ez a program már létezik',
             'description.required' => 'A leírás elvárt',
             'location.required' => 'A helyszín elvárt',
             'start_date.required' => 'Kezdő időpont elvárt',

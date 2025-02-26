@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class EventRequest extends FormRequest
+class TicketModRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,25 +24,17 @@ class EventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|unique:events',
-            'description' => 'required|string',
-            'location' => 'required|string',
-            'start_date' => 'required',
-            'end_date' => 'required'
+            'type' => 'string',
+            'price' => 'numeric'
         ];
     }
 
     public function messages() {
         return [
-            'name.required' => 'A név elvárt',
-            'name.unique' => 'Ez a program már létezik',
-            'description.required' => 'A leírás elvárt',
-            'location.required' => 'A helyszín elvárt',
-            'start_date.required' => 'Kezdő időpont elvárt',
-            'end_date.required' => 'Záró időpont elvárt'
+            'type.string' => 'A típus nem állhat csak számokból',
+            'price.numeric' => 'Az ár csak számokkal lehetséges'
         ];
     }
-
     public function failedValidation( Validator $validator ) {
 
         throw new HttpResponseException( response()->json([
