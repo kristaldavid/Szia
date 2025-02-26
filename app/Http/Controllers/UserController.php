@@ -26,7 +26,7 @@ class UserController extends ResponseController {
 
         $user->update();
 
-        return $this->sendResponse($user->name, "Admin jog megadva");
+        return $this->sendResponse($user->name, "Felhasználói jogosultságok módosítva");
     }
 
 }
