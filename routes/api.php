@@ -17,6 +17,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/setuser', [UserController::class, 'setUser']);
+    Route::post('/addevent', [EventController::class, 'addEvent']);
+    
+    Route::delete('/deleteevent', [EventController::class, 'destroyEvent']);
+    Route::put('/modifyevent', [EventController::class, 'modifyEvent']);
+
+    Route::put('/modticket', [TicketController::class, 'modifyTicket']);
+    
+    Route::delete('/deleteticket', [TicketController::class, 'destroyTicket']);
+    Route::get('/tickets', [TicketController::class, 'getTickets']);
+    Route::post('/addticket', [TicketController::class, 'addTicket']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -24,16 +34,6 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/events', [EventController::class, 'getEvents']);
 
-Route::post('/addevent', [EventController::class, 'addEvent']);
 
-Route::delete('/deleteevent', [EventController::class, 'destroyEvent']);
 
-Route::put('/modifyevent', [EventController::class, 'modifyEvent']);
 
-Route::get('/tickets', [TicketController::class, 'getTickets']);
-
-Route::post('/addticket', [TicketController::class, 'addTicket']);
-
-Route::put('/modticket', [TicketController::class, 'modifyTicket']);
-
-Route::delete('/deleteticket', [TicketController::class, 'destroyTicket']);
