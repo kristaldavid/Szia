@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Http\Controllers\BannerController;
+use App\Http\Controllers\ResponseController;
+
 
 
 
@@ -31,25 +34,51 @@ class AuthController extends ResponseController
         return $this->sendResponse( $user->name, "Sikeres regisztráció");
     }
 
-    public function login( UserLoginRequest $request ) {
-
+    public function login(UserLoginRequest $request)
+    {
         $request->validated();
 
-        if( Auth::attempt([ "email" => $request["email"], "password" => $request["password"]])) {
+        $bannerController = new BannerController();
+        $user = User::where("email", $request["email"])->first();
 
-            $actualTime = Carbon::now();
+       
+        if (!$user) {
+            return $this->sendError("Hiba", "Felhasználó nem található", 404);
+        }
+
+       
+        if ($user->banned) {
+            return $this->sendError("Hiba", "Felhasználó ki van tiltva", 403);
+        }
+
+       
+        $loginCounter = $bannerController->getLoginCounter($request["email"]);
+
+       
+        if ($loginCounter >= 3) {
+            $bannerController->banUser($request["email"]);
+            return $this->sendError("Hiba", "Túl sok próbálkozás - felhasználó kitiltva", 403);
+        }
+
+        if (Auth::attempt(["email" => $request["email"], "password" => $request["password"]])) {
             $authUser = Auth::user();
-                $token = $authUser->createToken( $authUser->email."Token" )->plainTextToken;
-                $data["user"] = [ "user" => $authUser->email ];
-                $data["token"] = $token;
+            $token = $authUser->createToken($authUser->email . "Token")->plainTextToken;
 
-                return $this->sendResponse( $data, "Sikeres bejelentkezés");
+            $bannerController->resetLoginCounter($request["email"]);
 
-            } else {
-                return $this->sendError( "Hiba", "Helytelen jelszó", 401);
-            }
-    }
-    
+            $data = [
+                "user" => ["user" => $authUser->email],
+                "token" => $token
+            ];
+
+            return $this->sendResponse($data, "Sikeres bejelentkezés");
+        }
+         
+         $bannerController->setLoginCounter($request["email"]);
+
+         return $this->sendError("Hiba", "Helytelen felhasználónév vagy jelszó", 401);
+     }
+ 
 
     public function logout() {
 
