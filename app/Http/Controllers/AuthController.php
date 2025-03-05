@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 
+
 class AuthController extends ResponseController
 {
 
@@ -24,7 +25,7 @@ class AuthController extends ResponseController
             "name" => $request["name"],
             "email" => $request["email"],
             "password" => bcrypt( $request["password"]),
-            "role" => $request["role"]
+            "role" => 2
         ]);
 
         return $this->sendResponse( $user->name, "Sikeres regisztráció");
