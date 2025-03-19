@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Controllers\ResponseController;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\UserModRequest;
+use App\Http\Resources\UserResource;
 
 class UserController extends ResponseController {
 
@@ -32,7 +33,7 @@ class UserController extends ResponseController {
             return $this->sendError("Autentikációs hiba", "Nincs jogosultsága", 401);
         }
 
-        $users = User::all();
-        return $this->sendResponse($users, "Felhasználók sikeresen lekérve");
+        $users = User::all()->get();
+        return $this->sendResponse(UserResource::collection($users), "Felhasználók sikeresen lekérve");
     }
 }
