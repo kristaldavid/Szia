@@ -28,7 +28,7 @@ class AuthController extends ResponseController
             "name" => $request["name"],
             "email" => $request["email"],
             "password" => bcrypt( $request["password"]),
-            "role" => 0
+            "role" => 2
         ]);
 
         return $this->sendResponse( $user->name, "Sikeres regisztráció");

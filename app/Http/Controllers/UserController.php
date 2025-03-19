@@ -33,7 +33,15 @@ class UserController extends ResponseController {
             return $this->sendError("Autentikációs hiba", "Nincs jogosultsága", 401);
         }
 
-        $users = User::all()->get();
+        $users = User::all();
         return $this->sendResponse(UserResource::collection($users), "Felhasználók sikeresen lekérve");
+    }
+
+    public function getUserByEmail(Request $request) {
+        if (!Gate::allows("organizer")) {
+            return $this->sendError("Autentikációs hiba", "Nincs jogosultsága", 401);
+        }
+        $user = User::where("email", $request["email"])->first();
+        return $this->sendResponse(new UserResource($user), "Felhasználó sikeresen lekérve");
     }
 }

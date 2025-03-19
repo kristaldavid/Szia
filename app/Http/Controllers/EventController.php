@@ -41,6 +41,11 @@ class EventController extends ResponseController
         return $this->sendResponse(new EventResource($event), "Sikeres hozzáadás");
     }
 
+    public function getEvent(Request $request) {
+        $event = Event::where('name', $request['name'])->with('user')->first();
+        return $this->sendResponse(new EventResource($event), "Sikeres olvasás");
+    }
+
     public function destroyEvent(Request $request) {
         if (!Gate::allows("organizer") ) {
             return $this->sendError("Autentikációs hiba", "Nincs jogosultsága", 401);
