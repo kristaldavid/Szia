@@ -44,4 +44,22 @@ class UserController extends ResponseController {
         $user = User::where("email", $request["email"])->first();
         return $this->sendResponse(new UserResource($user), "Felhasználó sikeresen lekérve");
     }
+
+    public function unBanUser(Request $request) {
+        if (Gate::allows("user")) {
+            return $this->sendError("Autentikációs hiba", "Nincs jogosultsága", 401);
+        }
+        $user = User::where("email", $request["email"])->first();
+        if (!$user) {
+            return $this->sendError("Hiba", "Felhasználó nem található", 404);
+        }
+        else if ($user->banned==false) {
+            return $this->sendError("Hiba", "Felhasználó nincs kitiltva", 403);
+        }
+        $user->banned = false;
+        $user->login_counter = 0;
+        $user->save();
+
+        return $this->sendResponse($user->name, "Felhasználó sikeresen feloldva");
+    }
 }

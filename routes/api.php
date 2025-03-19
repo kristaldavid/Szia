@@ -26,6 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/addticket', [TicketController::class, 'addTicket']);
 
     Route::get('/userbyemail', [UserController::class, 'getUserByEmail']);
+
+    Route::put('/unbanuser', [UserController::class, 'unBanUser']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
