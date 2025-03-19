@@ -32,7 +32,7 @@ class UserController extends ResponseController {
             return $this->sendError("Autentikációs hiba", "Nincs jogosultsága", 401);
         }
 
-        $users = User::all();
+        $users = User::all()->get();
         return $this->sendResponse($users, "Felhasználók sikeresen lekérve");
     }
 }
