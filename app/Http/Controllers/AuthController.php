@@ -87,6 +87,7 @@ class AuthController extends ResponseController
 
         return $this->sendResponse( $name, "Sikeres kijelentkezés");
     }
+    
 
 
 

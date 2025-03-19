@@ -7,6 +7,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ResponseController;
+use App\Http\Controllers\BannerController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -15,7 +16,7 @@ Route::get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user', [AuthController::class, 'user']);
+    Route::get('/user', [UserController::class, 'user']);
     Route::post('/setuser', [UserController::class, 'setUser']);
     Route::post('/addevent', [EventController::class, 'addEvent']);
     

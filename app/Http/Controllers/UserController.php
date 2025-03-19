@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -13,20 +11,28 @@ use App\Http\Requests\UserModRequest;
 
 class UserController extends ResponseController {
 
-    
     public function setUser(UserModRequest $request) {
-
-        if ( !Gate::allows("organizer") ) {
+        if (!Gate::allows("organizer")) {
             return $this->sendError("Autentikációs hiba", "Nincs jogosultsága", 401);
         }
 
         $user = User::find($request["id"]);
-        $user->role = $request["role"];
-        
 
-        $user->update();
+        if (!$user) {
+            return $this->sendError("Hiba", "Felhasználó nem található", 404);
+        }
+
+        $user->role = $request["role"];
+        $user->save(); 
 
         return $this->sendResponse($user->name, "Felhasználói jogosultságok módosítva");
     }
+    public function getUser(Request $request) {
+        if (!Gate::allows("organizer")) {
+            return $this->sendError("Autentikációs hiba", "Nincs jogosultsága", 401);
+        }
 
+        $users = User::all();
+        return $this->sendResponse($users, "Felhasználók sikeresen lekérve");
+    }
 }
